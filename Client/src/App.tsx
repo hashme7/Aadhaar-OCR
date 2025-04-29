@@ -24,7 +24,7 @@ function App() {
       const formData = new FormData();
       formData.append("image1", frontImage);
       formData.append("image2", backImage);
-
+      console.log(baseUrl,"baseUrl...")
       const response = await axios.post(`${baseUrl}/api`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
