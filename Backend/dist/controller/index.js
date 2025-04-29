@@ -9,24 +9,24 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const sharp_1 = require("../utils/sharp");
-const parseAadhar_1 = require("../utils/parseAadhar");
-const tessaract_1 = require("../utils/tessaract");
-class userController {
-    constructor() { }
+exports.UserController = void 0;
+class UserController {
+    constructor(userService) {
+        this.userService = userService;
+    }
     upload(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const files = req.files;
-                console.log(files, "files");
+                const filenames = [files.image1[0].filename, files.image2[0].filename];
                 res.status(200).json({
                     message: "Images uploaded successfully",
-                    fileNames: [files.image1[0].filename, files.image2[0].filename],
+                    fileNames: filenames,
                 });
             }
             catch (error) {
-                console.log("error on upload Image", error);
-                res.redirect("/pageNotFound");
+                console.error("Upload error:", error);
+                res.status(500).json({ message: `Internel server error: ${error}` });
             }
         });
     }
@@ -34,28 +34,17 @@ class userController {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const { frontSide, backSide } = req.params;
-                yield (0, sharp_1.preprocessImage)(`./uploads/${frontSide}`, `./sharpUploads/${frontSide}`);
-                yield (0, sharp_1.preprocessImage)(`./uploads/${backSide}`, `./sharpUploads/${backSide}`);
-                const { data: frontSideData } = yield (0, tessaract_1.pageRecognize)(frontSide);
-                const { data: backSideData } = yield (0, tessaract_1.pageRecognize)(backSide);
-                const result = {
-                    name: "",
-                    gender: "",
-                    dob: "",
-                    aadharNumber: "",
-                    address: "",
-                    pincode: "",
-                };
-                (0, parseAadhar_1.parseAadhaarBasicInfo)(frontSideData.text, result);
-                (0, parseAadhar_1.parseAadhaarAddressInfo)(backSideData.text, result);
-                console.log(result);
-                res.status(200).json({ message: "successfully completed", result });
+                const result = yield this.userService.extractAadhaarDetails(frontSide, backSide);
+                res.status(200).json({
+                    message: "Successfully extracted Aadhaar details",
+                    result,
+                });
             }
             catch (error) {
-                console.log("error on get Details", error);
-                res.status(500).json({ message: "Internel server error" });
+                console.error("Error getting Aadhaar details:", error);
+                res.status(500).json({ message: "Internal server error" });
             }
         });
     }
 }
-exports.default = userController;
+exports.UserController = UserController;

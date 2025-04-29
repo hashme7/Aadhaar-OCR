@@ -14,15 +14,21 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.preprocessImage = void 0;
 const sharp_1 = __importDefault(require("sharp"));
+const fs_1 = __importDefault(require("fs"));
 const preprocessImage = (inputPath, outputPath) => __awaiter(void 0, void 0, void 0, function* () {
     yield (0, sharp_1.default)(inputPath)
-        .resize(1500) // Resize for OCR clarity
-        .grayscale() // Convert to grayscale
-        .normalize() // Boost contrast
-        .threshold(140) // Apply binary thresholding
-        .sharpen({ sigma: 1 }) // Sharpen edges
-        .flatten({ background: "#ffffff" }) // Remove alpha & set white bg
+        .resize(1500)
+        .grayscale()
+        .normalize()
+        .threshold(140)
+        .sharpen({ sigma: 1 })
+        .flatten({ background: "#ffffff" })
         .blur(0.3)
         .toFile(outputPath);
+    fs_1.default.unlink(`./uploads/${inputPath}`, (err) => {
+        if (err)
+            console.log("error on deleting file ", err);
+        console.log(`file deleted successfully ${inputPath}`);
+    });
 });
 exports.preprocessImage = preprocessImage;

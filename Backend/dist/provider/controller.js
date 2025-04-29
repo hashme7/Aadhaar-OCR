@@ -1,8 +1,7 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-const controller_1 = __importDefault(require("../controller"));
-const controller = new controller_1.default();
+const controller_1 = require("../controller");
+const userServices_1 = require("../services/userServices");
+const userServiceInstance = new userServices_1.UserService();
+const controller = new controller_1.UserController(userServiceInstance);
 exports.default = controller;
