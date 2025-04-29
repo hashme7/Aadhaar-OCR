@@ -3,6 +3,8 @@ import axios from "axios";
 import UploadCard from "./components/UploadCard";
 import ResponsePanel from "./components/ResponsePanel";
 
+const baseUrl = import.meta.env.VITE_BASE_BACKEND_URL;
+
 function App() {
   const [frontImage, setFrontImage] = useState<string>("");
   const [backImage, setBackImage] = useState<string>("");
@@ -21,7 +23,7 @@ function App() {
       formData.append("image1", frontImage);
       formData.append("image2", backImage);
 
-      const response = await axios.post("http://localhost:3000/api", formData, {
+      const response = await axios.post(`${baseUrl}/api`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -41,7 +43,7 @@ function App() {
     try {
       setIsLoading(true);
       const response = await axios.get(
-        `http://localhost:3000/api/${storedFileNames.frontFileName}/${storedFileNames.backFileName}`
+        `${baseUrl}/api/${storedFileNames.frontFileName}/${storedFileNames.backFileName}`
       );
       setApiResponse(response.data.result);
     } catch (error) {
@@ -58,7 +60,11 @@ function App() {
           <div className="w-full md:w-1/2">
             <UploadCard title="Aadhaar Front" onFileSelect={setFrontImage} />
             <UploadCard title="Aadhar Back" onFileSelect={setBackImage} />
-
+            <div className="text-sm text-gray-500 mb-4">
+              <p>
+                Please upload high-quality images for more accurate details.
+              </p>
+            </div>
             <div className="flex gap-4 mb-4">
               <button
                 className="flex-1 bg-gray-500 hover:bg-gray-600 text-white font-medium py-3 px-4 rounded transition-colors focus:outline-none focus:ring-2 focus:ring-gray-300 disabled:opacity-50"
