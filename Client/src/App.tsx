@@ -3,7 +3,7 @@ import axios from "axios";
 import UploadCard from "./components/UploadCard";
 import ResponsePanel from "./components/ResponsePanel";
 
-const baseUrl = import.meta.env.VITE_BASE_BACKEND_URL;
+const baseUrl = import.meta.env.VITE_API_BASE_URL; ;
 console.log(baseUrl,"baseUrl");
 
 
