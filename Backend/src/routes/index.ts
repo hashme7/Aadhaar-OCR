@@ -2,17 +2,18 @@ import { Router } from "express";
 import upload from "../middleware/multer";
 import controller from "../provider/controller";
 
-const routes = Router();
+const router = Router();
 
-routes.post(
-  "/api",
+router.route("/api").post(
   upload.fields([
     { name: "image1", maxCount: 1 },
     { name: "image2", maxCount: 1 },
   ]),
-  controller.upload.bind(controller)
+  (req, res) => controller.upload(req, res)
 );
 
-routes.get("/api/:frontSide/:backSide", controller.getDetails.bind(controller));
+router
+  .route("/api/:frontSide/:backSide")
+  .get((req, res) => controller.getDetails(req, res));
 
-export default routes;
+export default router;
