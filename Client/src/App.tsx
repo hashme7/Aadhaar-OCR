@@ -20,6 +20,7 @@ function App() {
 
   const handleUploadImages = async () => {
     try {
+      console.log("heeyyyy")
       setIsUploading(true);
       const formData = new FormData();
       formData.append("image1", frontImage);
