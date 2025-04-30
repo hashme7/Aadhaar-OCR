@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import UploadCard from "./components/UploadCard";
 import ResponsePanel from "./components/ResponsePanel";
@@ -17,6 +17,11 @@ function App() {
   const [apiResponse, setApiResponse] = useState(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isUploading, setIsUploading] = useState<boolean>(false);
+
+  useEffect(() => {
+    console.log(baseUrl,"baseeeee");
+    
+  })
 
   const handleUploadImages = async () => {
     try {
